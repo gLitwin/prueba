@@ -29,18 +29,16 @@ export class MyLogger implements LoggerService {
   verbose?(message: any, ...optionalParams: any[]) {}
 }
 
-
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
-    logger: ['verbose']
+    logger: ['verbose'],
     //logger: new MyLogger()
   });
 
-  app.enableCors()
+  app.enableCors();
   await app.listen(process.env.APP_PORT);
   const logger = new Logger('MAIN');
-  logger.verbose('HTTP Web Server Running: '+ await app.getUrl());
- // console.log(await app.getUrl());
-  
+  logger.verbose('HTTP Web Server Running: ' + (await app.getUrl()));
+  // console.log(await app.getUrl());
 }
 bootstrap();

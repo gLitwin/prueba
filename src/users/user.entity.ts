@@ -1,5 +1,10 @@
-
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, DeleteDateColumn } from 'typeorm';
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  DeleteDateColumn,
+} from 'typeorm';
 //import { Photo } from '../photos/photo.entity';
 
 @Entity()
@@ -22,6 +27,6 @@ export class User {
   @DeleteDateColumn()
   DeleteDateColumn: Date;
 
- // @OneToMany(type => Photo, photo => photo.user)
- // photos: Photo[];
+  // @OneToMany(type => Photo, photo => photo.user)
+  // photos: Photo[];
 }
