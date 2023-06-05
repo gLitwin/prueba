@@ -7,14 +7,65 @@ import { promises } from 'dns';
 
 @Injectable()
 export class UsersService {
-  constructor(private dataSource: DataSource) {}
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>) {}
 
-  async createOne(user: User) {
-    await this.dataSource.transaction(async (manager) => {
-      await manager.save(user);
-    });
+  async create(user: any) {
+    const userEntity = this.userRepository.create({...user})
+    return await this.userRepository.save(userEntity)
   }
 
+  async update(id: number, user: any) {
+    const userEntity = await this.userRepository.preload({...user, id})
+    return await this.userRepository.save(userEntity)
+  }
+
+  async delete(id: number) {
+    const userEntity = await this.userRepository.preload({id})
+    return await this.userRepository.softRemove(userEntity)
+  }
+  
+  async findAll(page: number, pageSize: number) {
+    const skip = page*pageSize;
+    const users = await this.userRepository.find({skip: skip, take: pageSize})
+
+    return { 
+      users: users,
+      page: page,
+      totalresults: await this.userRepository.count()}
+  }
+
+
+
+
+  async search(user: any) {
+  
+    return await this.userRepository.findBy({...user})
+  }
+  
+  async getById(id: number) {
+  
+    return await this.userRepository.findOneBy({id: id})
+  }
+
+  async getByPag(user: any, pageSize:number, page:number) {
+
+    return await this.userRepository.find({where:{...user}, skip: page*pageSize, take: pageSize})
+  }
+
+
+
+
+
+
+/*   async countBy(user: any){
+    return await this.userRepository.countBy({...user})
+  } */
+
+
+
+/* 
   async softRemoveUser(user: User) {
     await this.dataSource.transaction(async (manager) => {
       await manager.softRemove(user);
@@ -72,7 +123,7 @@ export class UsersService {
     });
     return count1;
   }
-
+ */
   /* async findPag(conditions, pageSize: number, page: number){
     await this.dataSource
     .getRepository(User)
