@@ -9,6 +9,6 @@ import { DatabaseModule } from './database/database.module';
     }),
     DatabaseModule,
     UsersModule,
-  ]
+  ],
 })
 export class AppModule {}
